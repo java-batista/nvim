@@ -12,4 +12,11 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("vim-options")
-require("lazy").setup("plugins")
+--require("lazy").setup("plugins")
+require("lazy").setup(
+  {
+	  -- require 'plugins.catppuccin',
+	  require 'plugins.treesitter',	
+	  require 'plugins.telescope'
+  }
+)
