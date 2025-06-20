@@ -16,3 +16,6 @@ vim.keymap.set('n', '<c-l>', ':wincmd l<CR>')
 vim.keymap.set('n', '<leader>h', ':nohlsearch<CR>')
 vim.wo.number = true
 
+-- Remove the tildes (~) from the empty lines. Disable the end-of-buffer markers
+vim.opt.fillchars:append({ eob = " " })
+
