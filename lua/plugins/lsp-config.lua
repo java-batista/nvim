@@ -12,7 +12,8 @@ return {
     tag = "v2.0.0-rc.1",
     lazy = false,
     opts = {
-      auto_install = true,
+      --auto_install = true,
+      ensure_installed = { "lua_ls", "clangd" },
     },
   },
   {
@@ -20,20 +21,15 @@ return {
     tag = "v1.8.0",
     lazy = false,
     config = function()
-      local capabilities = require('cmp_nvim_lsp').default_capabilities()
+      --local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
       local lspconfig = require("lspconfig")
-      lspconfig.tsserver.setup({
-        capabilities = capabilities
-      })
-      lspconfig.solargraph.setup({
-        capabilities = capabilities
-      })
-      --lspconfig.html.setup({
+                
+      lspconfig.clangd.setup({
         --capabilities = capabilities
-      --})
+      })
       lspconfig.lua_ls.setup({
-        capabilities = capabilities
+        --capabilities = capabilities
       })
 
       vim.keymap.set("n", "K", vim.lsp.buf.hover, {})
