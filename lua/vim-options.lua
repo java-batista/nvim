@@ -18,4 +18,5 @@ vim.wo.number = true
 
 -- Remove the tildes (~) from the empty lines. Disable the end-of-buffer markers
 vim.opt.fillchars:append({ eob = " " })
-
+-- Prevent Neovim LSP from opening a scratch preview buffer
+vim.cmd("set completeopt-=preview")
