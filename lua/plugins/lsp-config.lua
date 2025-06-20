@@ -13,7 +13,7 @@ return {
     lazy = false,
     opts = {
       --auto_install = true,
-      ensure_installed = { "lua_ls", "clangd" },
+      ensure_installed = { "lua_ls", "clangd", "pylsp", "arduino_language_server"  },
     },
   },
   {
@@ -23,12 +23,18 @@ return {
     config = function()
       --local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
-      local lspconfig = require("lspconfig")
-                
+      local lspconfig = require("lspconfig")        
+               
+      lspconfig.lua_ls.setup({
+        --capabilities = capabilities
+      })
       lspconfig.clangd.setup({
         --capabilities = capabilities
       })
-      lspconfig.lua_ls.setup({
+      lspconfig.pylsp.setup({
+        --capabilities = capabilities
+      })
+      lspconfig.arduino_language_server.setup({
         --capabilities = capabilities
       })
 
