@@ -19,6 +19,7 @@ require("lazy").setup(
 	-- require 'plugins.tokyonight',
 	require 'plugins.treesitter',	
 	require 'plugins.telescope',
-	require 'plugins.neo-tree'
+	require 'plugins.neo-tree',
+	require 'plugins.lsp-config'
   }
 )
