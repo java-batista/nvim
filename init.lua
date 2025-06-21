@@ -21,4 +21,5 @@ require("lazy").setup({
 	require("plugins.neo-tree"),
 	require("plugins.lsp-config"),
 	require("plugins.none-ls"),
+	require("plugins.alpha"),
 })

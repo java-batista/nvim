@@ -1,31 +1,24 @@
 return {
-  "goolord/alpha-nvim",
-  dependencies = {
-    "nvim-tree/nvim-web-devicons",
-  },
+    "goolord/alpha-nvim",
+    dependencies = {
+        "nvim-tree/nvim-web-devicons",
+    },
 
-  config = function()
-    local alpha = require("alpha")
-    local dashboard = require("alpha.themes.startify")
+    config = function()
+        --require'alpha'.setup(require'alpha.themes.theta'.config)
+        local alpha = require("alpha")
+        local dashboard = require("alpha.themes.theta")
 
-    dashboard.section.header.val = {
-      [[                                                                       ]],
-      [[                                                                       ]],
-      [[                                                                       ]],
-      [[                                                                       ]],
-      [[                                                                     ]],
-      [[       ████ ██████           █████      ██                     ]],
-      [[      ███████████             █████                             ]],
-      [[      █████████ ███████████████████ ███   ███████████   ]],
-      [[     █████████  ███    █████████████ █████ ██████████████   ]],
-      [[    █████████ ██████████ █████████ █████ █████ ████ █████   ]],
-      [[  ███████████ ███    ███ █████████ █████ █████ ████ █████  ]],
-      [[ ██████  █████████████████████ ████ █████ █████ ████ ██████ ]],
-      [[                                                                       ]],
-      [[                                                                       ]],
-      [[                                                                       ]],
-    }
+        -- Set header
+        dashboard.header.val = {
+            "  ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗ ",
+            "  ████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║ ",
+            "  ██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║ ",
+            "  ██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║ ",
+            "  ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║ ",
+            "  ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝ ",
+        }
 
-    alpha.setup(dashboard.opts)
-  end,
+       alpha.setup(dashboard.config)
+    end,
 }
