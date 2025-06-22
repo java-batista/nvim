@@ -38,6 +38,10 @@ return {
                 capabilities = capabilities,
             })
 
+            vim.diagnostic.config({ virtual_text = true, })
+
+            --vim.diagnostic.config({ float = {} })
+
             vim.keymap.set("n", "K", vim.lsp.buf.hover, {})
             vim.keymap.set("n", "<leader>gd", vim.lsp.buf.definition, {})
             vim.keymap.set("n", "<leader>gr", vim.lsp.buf.references, {})
