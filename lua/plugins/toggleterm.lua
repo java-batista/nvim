@@ -1,7 +1,8 @@
 return {
 	"akinsho/toggleterm.nvim",
 	version = "*",
-	config = true,
-	--config = function()
-	--end,
+	--config = true,
+	opts = {
+		open_mapping = [[<c-\>]],
+	},
 }
