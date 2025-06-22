@@ -23,4 +23,5 @@ require("lazy").setup({
     require("plugins.none-ls"),
     require("plugins.alpha"),
     require("plugins.completions"),
+    require("plugins.toggleterm"),
 })
