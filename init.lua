@@ -25,4 +25,5 @@ require("lazy").setup({
     require("plugins.completions"),
     require("plugins.toggleterm"),
     require("plugins.render-markdown"),
+    require("plugins.markdown-tree"),
 })
