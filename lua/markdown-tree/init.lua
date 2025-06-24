@@ -216,14 +216,24 @@ end
 -- Jump to heading under cursor
 function M.jump_to_heading()
     M.toggle_expand()
-  local cursor = vim.api.nvim_win_get_cursor(0)
-  local line = cursor[1]
-  local idx = M.view_lines[line]
-  if not idx then return end
+    local cursor = vim.api.nvim_win_get_cursor(0)
+    local panel = vim.api.nvim_get_current_win()
+    local line = cursor[1]
+    local idx = M.view_lines[line]
+    if not idx then return end
 
-  local h = M.headings[idx]
-  vim.api.nvim_set_current_win(vim.fn.bufwinid(M.source_buf))
-  vim.api.nvim_win_set_cursor(0, { h.line, 0 })
+    local h = M.headings[idx]
+    if not (h.level == 1) then
+        -- Se não for top level, salta para a posição.
+        vim.api.nvim_set_current_win(vim.fn.bufwinid(M.source_buf))
+        vim.api.nvim_win_set_cursor(0, { h.line, 0 })
+    else
+        -- Se for top level, salta para posição mais matem o cursor no sumario.
+        vim.api.nvim_set_current_win(vim.fn.bufwinid(M.source_buf))
+        vim.api.nvim_win_set_cursor(0, { h.line, 0 })
+        vim.api.nvim_set_current_win(panel)
+        vim.api.nvim_win_set_cursor(0,cursor)
+    end
 end
 
 return M
