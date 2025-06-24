@@ -4,7 +4,9 @@ local ts = vim.treesitter
 local M = {}
 
 -- Store heading list and original buffer
-M.headings = {}
+M.headings = {}         -- full flat list of headings
+M.view_lines = {}       -- current lines shown in the panel
+M.expanded = {}         -- which top-level headings are expanded
 M.source_buf = nil
 M.panel_win = nil
 M.panel_buf = nil
@@ -12,7 +14,6 @@ M.panel_buf = nil
 -- Parse headings
 function M.parse_headings()
     local bufnr =  M.source_buf
-
     local lang = ts.language.get_lang(vim.bo[bufnr].filetype)
     local parser = ts.get_parser(bufnr, lang)
     local tree = parser:parse()[1]
@@ -59,6 +60,39 @@ function M.parse_headings()
     M.headings = headings
 end
 
+-- Build view lines according to expanded state
+function M.build_view()
+  local lines = {}
+  local indices = {} -- map view line -> heading index in M.headings
+
+  local i = 1
+  while i <= #M.headings do
+    local h = M.headings[i]
+    if h.level == 1 then
+      -- always show level 1
+      local prefix = M.expanded[i] and "▾ " or "▸ "
+      table.insert(lines, prefix .. h.text)
+      table.insert(indices, i)
+
+      if M.expanded[i] then
+        -- show children until next level 1
+        local j = i + 1
+        while j <= #M.headings and M.headings[j].level > 1 do
+          local child = M.headings[j]
+          local indent = string.rep("  ", child.level - 1)
+          table.insert(lines, indent .. "  " .. child.text)
+          table.insert(indices, j)
+          j = j + 1
+        end
+      end
+    end
+    i = i + 1
+  end
+
+  M.view_lines = indices
+  return lines
+end
+
 -- Close side panel
 function M.close_panel()
     -- Close existing if open
@@ -80,17 +114,28 @@ function M.render_panel()
     end
 
     vim.api.nvim_buf_set_option(M.panel_buf, "modifiable", true)
-    local lines = {}
-    for _, h in ipairs(M.headings) do
-        local indent = string.rep("  ", h.level - 1)
-        table.insert(lines, indent .. h.text)
-    end
+    local lines = M.build_view()
     vim.api.nvim_buf_set_lines(M.panel_buf, 0, -1, false, lines)
     vim.api.nvim_buf_set_option(M.panel_buf, "modifiable", false)
 end
 
+-- Toggle expand/collapse on <CR>
+function M.toggle_expand()
+  local cursor = vim.api.nvim_win_get_cursor(0)
+  local line = cursor[1]
+  local idx = M.view_lines[line]
+  if not idx then return end
+
+  local h = M.headings[idx]
+  if h.level == 1 then
+    M.expanded[idx] = not M.expanded[idx]
+    M.render_panel()
+  end
+end
+
 -- Open side panel
 function M.open_panel()
+    M.expanded = {}
     -- If panel not open
     if not (M.panel_win and vim.api.nvim_win_is_valid(M.panel_win)) then
         M.source_buf = vim.api.nvim_get_current_buf()
@@ -146,7 +191,7 @@ function M.open_panel()
     -- Set autocmd to auto-update on changes
     vim.api.nvim_create_autocmd(
         --{ "TextChanged", "BufWritePost" }, 
-        { "TextChanged", "InsertLeave", "BufWritePost" }, 
+        { "TextChanged", "InsertLeave", "BufWritePost" },
         {
         buffer = M.source_buf,
         callback = function()
@@ -170,14 +215,15 @@ end
 
 -- Jump to heading under cursor
 function M.jump_to_heading()
-    local cursor = vim.api.nvim_win_get_cursor(0)
-    local line = cursor[1]
-    local heading = M.headings[line]
-    if heading then
-        -- Jump in source buffer
-        vim.api.nvim_set_current_win(vim.fn.bufwinid(M.source_buf))
-        vim.api.nvim_win_set_cursor(0, { heading.line, 0 })
-    end
+    M.toggle_expand()
+  local cursor = vim.api.nvim_win_get_cursor(0)
+  local line = cursor[1]
+  local idx = M.view_lines[line]
+  if not idx then return end
+
+  local h = M.headings[idx]
+  vim.api.nvim_set_current_win(vim.fn.bufwinid(M.source_buf))
+  vim.api.nvim_win_set_cursor(0, { h.line, 0 })
 end
 
 return M
