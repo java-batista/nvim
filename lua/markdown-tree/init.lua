@@ -227,12 +227,18 @@ function M.jump_to_heading()
         -- Se não for top level, salta para a posição.
         vim.api.nvim_set_current_win(vim.fn.bufwinid(M.source_buf))
         vim.api.nvim_win_set_cursor(0, { h.line, 0 })
+        vim.cmd("normal! zt") -- Force heading to top of screen
+        vim.api.nvim_win_set_cursor(0, { h.line+1, 0 })
     else
-        -- Se for top level, salta para posição mais matem o cursor no sumario.
+        -- Se for top level.
         vim.api.nvim_set_current_win(vim.fn.bufwinid(M.source_buf))
         vim.api.nvim_win_set_cursor(0, { h.line, 0 })
-        vim.api.nvim_set_current_win(panel)
-        vim.api.nvim_win_set_cursor(0,cursor)
+        vim.cmd("normal! zt") -- Force heading to top of screen
+        vim.api.nvim_win_set_cursor(0, { h.line+1, 0 })
+        if (M.headings[idx+1].level ~= 1) then -- has chidrem. Cursor stay in the summary
+            vim.api.nvim_set_current_win(panel)
+            vim.api.nvim_win_set_cursor(0,cursor)
+        end
     end
 end
 
