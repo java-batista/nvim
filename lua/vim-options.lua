@@ -19,6 +19,14 @@ vim.keymap.set('n', '<c-j>', ':wincmd j<CR>')
 vim.keymap.set('n', '<c-h>', ':wincmd h<CR>')
 vim.keymap.set('n', '<c-l>', ':wincmd l<CR>')
 
+-- Buffers and Tabs
+vim.keymap.set('n', '<c-s>', ':w<CR>')
+vim.keymap.set("n", "<TAB>", ":bn<CR>")
+vim.keymap.set("n", "<S-TAB>", ":bp<CR>")
+vim.keymap.set("n", "<leader>bd", ":bd<CR>")
+
+vim.keymap.set('n', '<leader>q', ':q<CR>')
+
 vim.keymap.set('n', '<leader>h', ':nohlsearch<CR>')
 vim.wo.number = true
 
